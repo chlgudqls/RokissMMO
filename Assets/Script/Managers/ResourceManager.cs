@@ -42,6 +42,7 @@ public class ResourceManager
             return null;
         }
 
+        // 풀객체는 따로 처리하고 리턴하는것
         if (original.GetComponent<Poolable>() != null)
             return Managers.Pool.Pop(original, parent).gameObject;
 
@@ -69,6 +70,13 @@ public class ResourceManager
         if (go == null)
             return;
 
+        Poolable poolable = go.GetComponent<Poolable>();
+        if (poolable != null)
+        {
+            Managers.Pool.Push(poolable);
+            return;
+        }
+             
         Object.Destroy(go);
     }
 }

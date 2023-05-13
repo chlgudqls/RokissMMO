@@ -51,6 +51,7 @@ public class Managers : MonoBehaviour
 
             // Instance 사용하면 무한루프 주의
             s_instance._sound.Init();
+            s_instance._pool.Init();
         }
     }
     public static void Clear()
@@ -59,5 +60,6 @@ public class Managers : MonoBehaviour
         Sound.Clear();
         Scene.Clear();
         UI.Clear();
+        Pool.Clear();
     }
 }
