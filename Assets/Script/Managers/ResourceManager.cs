@@ -42,8 +42,8 @@ public class ResourceManager
             return null;
         }
 
-        if(original.GetComponent<Poolable>() != null)
-
+        if (original.GetComponent<Poolable>() != null)
+            return Managers.Pool.Pop(original, parent).gameObject;
 
         // 프리팹생성될떄 clone을 없애려고함
         GameObject go = Object.Instantiate(original, parent);
