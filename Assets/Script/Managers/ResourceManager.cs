@@ -30,7 +30,7 @@ public class ResourceManager
         return Resources.Load<T>(path);
     }
     // load하면 그경로안의 data를 가져오고 변수에 넣고 object의 instantiate 함수호출
-
+    
     // 일단변수넣어보고 널체크하고 제대로된거면 제대로리턴
     public GameObject Instantiate(string path, Transform parent = null)
     {

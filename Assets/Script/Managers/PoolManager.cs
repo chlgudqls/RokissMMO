@@ -6,9 +6,9 @@ public class PoolManager
 {
     // 풀메니저가 최상위 그밑에 풀들을 갖고있기떄문에 클래스로 관리해주게됨
     class Pool
+        // 풀 프리팹 개개인에 부여될것들을 여기서 집어넣음
     #region Pool
     {
-        // 이 변수들 갑자기 뭔진 모르겠음
         public GameObject Original { get; private set; }
         public Transform Root { get; set; }
 

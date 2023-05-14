@@ -12,13 +12,12 @@ public class LoginScene : BaseScene
 
         SceneType = Define.Scene.Login;
 
-        List<GameObject> list = new List<GameObject>();
-        for (int i = 0; i < 5; i++)
-            list.Add(Managers.Resource.Instantiate("unitychan"));
+        //List<GameObject> list = new List<GameObject>();
+        //for (int i = 0; i < 5; i++)
+        //    list.Add(Managers.Resource.Instantiate("unitychan"));
 
-        foreach (GameObject obj in list)
-            Managers.Resource.Destroy(obj);
-            
+        //foreach (GameObject obj in list)
+        //    Managers.Resource.Destroy(obj);
     }
 
     void Update()
