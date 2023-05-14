@@ -57,6 +57,11 @@ public class PoolManager
                 poolable = Create();
 
             poolable.gameObject.SetActive(true);
+
+            // parent가 널이라는거 자체가 돈디스트로이의 산하는 parent가 아니라는말
+            if(parent == null)
+                poolable.transform.parent = Managers.Scene.CurrentScene.transform;
+
             // 아마 새로만든건 따로 설정이 필요하기 떄문
             poolable.transform.parent = parent;
             poolable.IsUsing = true;
