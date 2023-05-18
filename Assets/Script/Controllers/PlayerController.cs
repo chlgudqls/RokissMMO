@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.AI;
 
 
 // 백터는 두 가지로만 사용됨
@@ -49,19 +50,29 @@ public class PlayerController : MonoBehaviour
     void UpdateMoving()
     {
         Vector3 dir = _destPos - transform.position;
-        if (dir.magnitude < 0.001f)
+        if (dir.magnitude < 0.1f)
         {
             _state = PlayerState.Idle;
         }
         else
         {
+            NavMeshAgent nma = gameObject.GetOrAddComponent<NavMeshAgent>();
+
             // 이동값이 저거임 _speed * Time.deltaTime 그대로가 아니라 프레임단위로 쪼개지는값이라서 이게 계속좁혀지다가 magnitude보다 작아져야됨
             float moveDist = Mathf.Clamp(_speed * Time.deltaTime, 0, dir.magnitude);
 
+            nma.Move(dir.normalized * moveDist);
+
+            Debug.DrawRay(transform.position, dir.normalized, Color.green);
+            if (Physics.Raycast(transform.position + Vector3.up * 0.5f, dir, 1.0f, LayerMask.GetMask("Block")))
+            {
+                _state = PlayerState.Idle;
+                return;
+            }
 
             //  이동뿐만아니라 바라보는 방향도 설정해줘야됨  
             transform.rotation = Quaternion.Slerp(transform.rotation, Quaternion.LookRotation(dir), 10 * Time.deltaTime);
-            transform.position += dir.normalized * moveDist;
+            //transform.position += dir.normalized * moveDist;
 
         }
 
