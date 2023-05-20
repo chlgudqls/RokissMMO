@@ -12,12 +12,12 @@ public interface ILoader<Key, Value>
 
 public class DataManager
 {
-   public Dictionary<int, Stat> StatDict { get; private set; } = new Dictionary<int, Stat>();
+   public Dictionary<int, Data.Stat> StatDict { get; private set; } = new Dictionary<int, Data.Stat>();
 
     // 리스트를 갖고있는 딕셔너리를 만들어서 클래스하나를 통째로 관리할생각 
     public void Init()
     {
-        StatDict = LoadJson<StatData, int, Stat>("StatData").MakeDict();
+        StatDict = LoadJson<Data.StatData, int, Data.Stat>("StatData").MakeDict();
     }
 
     // 로더가 모든 클래스를 수용해서 가능
