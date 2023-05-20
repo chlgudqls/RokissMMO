@@ -13,13 +13,13 @@ using UnityEngine.AI;
 
 public class PlayerController : MonoBehaviour
 {
-    [SerializeField]
-    float _speed = 10.0f;
+    PlayerStat _stat;
 
     Vector3 _destPos;
 
     void Start()
     {
+        _stat = gameObject.GetComponent<PlayerStat>();
         // 저번엔 리스너패턴 이번엔 옵저버패턴
         Managers.Input.MouseEvent -= OnMouseClicked;
         Managers.Input.MouseEvent += OnMouseClicked;
@@ -39,6 +39,7 @@ public class PlayerController : MonoBehaviour
         Die,
         Moving,
         Idle,
+        Skill,
     }
 
     PlayerState _state = PlayerState.Idle;
@@ -59,7 +60,7 @@ public class PlayerController : MonoBehaviour
             NavMeshAgent nma = gameObject.GetOrAddComponent<NavMeshAgent>();
 
             // 이동값이 저거임 _speed * Time.deltaTime 그대로가 아니라 프레임단위로 쪼개지는값이라서 이게 계속좁혀지다가 magnitude보다 작아져야됨
-            float moveDist = Mathf.Clamp(_speed * Time.deltaTime, 0, dir.magnitude);
+            float moveDist = Mathf.Clamp(_stat.MoveSpeed * Time.deltaTime, 0, dir.magnitude);
 
             nma.Move(dir.normalized * moveDist);
 
@@ -77,7 +78,7 @@ public class PlayerController : MonoBehaviour
         }
 
         Animator anim = GetComponent<Animator>();
-        anim.SetFloat("speed", _speed);
+        anim.SetFloat("speed", _stat.MoveSpeed);
     }
     void UpdateIdle()
     {
@@ -104,6 +105,9 @@ public class PlayerController : MonoBehaviour
         // 조건 만족하면 여기서 실행하는느낌인가 
     }
 
+    // 이 연산자의 의미는 뭐지
+    int _mask = (1 << (int)Define.Layer.Ground | 1 << (int)Define.Layer.Monster);
+
     // 아.. 대리자에서 <>안에 들어가는게 인자의 숫자였음 매개변수갯수
     void OnMouseClicked(Define.MouseEvent evt)
     {
@@ -120,7 +124,8 @@ public class PlayerController : MonoBehaviour
 
         RaycastHit hit;
 
-        if (Physics.Raycast(ray , out hit, 100, LayerMask.GetMask("Wall")))
+        // LayerMask.GetMask("Ground") | LayerMask.GetMask("Monster")
+        if (Physics.Raycast(ray , out hit, 100, _mask))
         {
             _destPos = hit.point;
 

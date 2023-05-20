@@ -4,6 +4,12 @@ using UnityEngine;
 
 public class Define
 {
+    public enum Layer
+    {
+        Monster = 8,
+        Ground,
+        Block,
+    }
     // 씬에 대한 정의
     public enum Scene
     {

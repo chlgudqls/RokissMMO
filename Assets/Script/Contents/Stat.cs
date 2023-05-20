@@ -6,22 +6,32 @@ public class Stat : MonoBehaviour
 {
     // 이렇게 사용하는 이유가있음 
     [SerializeField]
-    int _level;
+    protected int _level;
     [SerializeField]
-    int _hp;
+    protected int _hp;
     [SerializeField]
-    int _maxHp;
+    protected int _maxHp;
     [SerializeField]
-    int _attack;
+    protected int _attack;
     [SerializeField]
-    int _defence;
+    protected int _defence;
     [SerializeField]
-    float _moveSpeed;
+    protected float _moveSpeed;
 
     public int Level { get { return _level; } set { _level = value; } }
     public int Hp { get { return _hp; } set { _hp = value; } }
     public int MaxHp { get { return _maxHp; } set { _maxHp = value; } }
     public int Attack { get { return _attack; } set { _attack = value; } }
     public int Defence { get { return _defence; } set { _defence = value; } }
-    public float Speed { get { return _moveSpeed; } set { _moveSpeed = value; } }
+    public float MoveSpeed { get { return _moveSpeed; } set { _moveSpeed = value; } }
+
+    private void Start()
+    {
+        _level = 1;
+        _hp = 100;
+        _maxHp = 100;
+        _attack = 10;
+        _defence = 5;
+        _moveSpeed = 5.0f;
+    }
 }
