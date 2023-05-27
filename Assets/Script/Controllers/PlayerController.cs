@@ -105,7 +105,31 @@ public class PlayerController : MonoBehaviour
         // 조건 만족하면 여기서 실행하는느낌인가 
     }
 
+    // 이동부분과 커서의 표현부분을 따로 둠
+    void UpdateMouseCursor()
+    {
+        Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
+
+        RaycastHit hit;
+
+        if (Physics.Raycast(ray, out hit, 100, _mask))
+        {
+
+            //Debug.Log($"hit {hit.transform.gameObject.name}");
+            if (hit.collider.gameObject.layer == (int)Define.Layer.Monster)
+            {
+                Texture2D tex = Managers.Resource.Load<Texture2D>("Textures/Cursor/Attack");
+            }
+            else
+            {
+                Texture2D tex = Managers.Resource.Load<Texture2D>("Textures/Cursor/Hand");
+
+            }
+        }
+    }
+
     // 이 연산자의 의미는 뭐지
+    // 어쨋거나 비트상으로 봤을때 01로구분하고 8번째9번째 비트가 0,1인지를 확인하는 듯
     int _mask = (1 << (int)Define.Layer.Ground | 1 << (int)Define.Layer.Monster);
 
     // 아.. 대리자에서 <>안에 들어가는게 인자의 숫자였음 매개변수갯수
@@ -132,6 +156,14 @@ public class PlayerController : MonoBehaviour
             _state = PlayerState.Moving;
 
             //Debug.Log($"hit {hit.transform.gameObject.name}");
+            if (hit.collider.gameObject.layer == (int)Define.Layer.Monster)
+            {
+                Debug.Log("Monster Click!");
+            }
+            else
+            {
+                Debug.Log("Ground Click!");
+            }
         }
     }
 }
