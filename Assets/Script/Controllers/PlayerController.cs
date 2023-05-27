@@ -125,6 +125,9 @@ public class PlayerController : MonoBehaviour
     // 이동부분과 커서의 표현부분을 따로 둠
     void UpdateMouseCursor()
     {
+        if (Input.GetMouseButton(0))
+            return;
+
         Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
 
         RaycastHit hit;
