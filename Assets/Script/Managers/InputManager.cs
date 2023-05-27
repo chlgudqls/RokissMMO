@@ -16,6 +16,8 @@ public class InputManager
     public Action<Define.MouseEvent> MouseEvent = null;
 
     bool _pressed = false;
+
+    float _pressedTime = 0;
     public void OnUpdate()
     {
         // 마우스를 떼는 것도 상태변화로 인식한다 이제 마우스도 추가하는데 그래서 이걸로 씹힌다고하네
@@ -34,6 +36,12 @@ public class InputManager
         {
             if(Input.GetMouseButton(0))
             {
+                if (!_pressed)
+                {
+                    MouseEvent.Invoke(Define.MouseEvent.PointerDown);
+                    // 누른시간이 들어옴
+                    _pressedTime = Time.time;
+                }
                 // 지정해서 실행을하는건가  
                 // 눌렀을때 press 여기서 뭔가 보냄
                 // 인보크가 함수라는걸 인지해야됨 매개변수넘긴거임  
@@ -44,10 +52,16 @@ public class InputManager
             else
             {
                 // 누른상황에서 뗐을떄니까 true여야됨
-                if(_pressed)
-                    MouseEvent.Invoke(Define.MouseEvent.Click);
+                if (_pressed)
+                {
+                    // 0.2는 지난시간
+                    if (Time.time < _pressedTime + 0.2f)
+                        MouseEvent.Invoke(Define.MouseEvent.Click);
+                    MouseEvent.Invoke(Define.MouseEvent.PointerUp);
+                }
 
                 _pressed = false;
+                _pressedTime = 0;
             }
         }
     }
