@@ -13,7 +13,7 @@ public class InputManager
     // 전파해줄 delegate 리스너 패턴이라고함
     public Action KeyAction = null;
     // 제네릭에 enum도 들어가는구나
-    public Action<Define.MouseEvent> MouseEvent = null;
+    public Action<Define.MouseEvent> MouseAction = null;
 
     bool _pressed = false;
 
@@ -32,20 +32,20 @@ public class InputManager
             KeyAction.Invoke();
 
         // update에서 계속널이다가 들어옴
-        if(MouseEvent != null)  
+        if(MouseAction != null)  
         {
             if(Input.GetMouseButton(0))
             {
                 if (!_pressed)
                 {
-                    MouseEvent.Invoke(Define.MouseEvent.PointerDown);
+                    MouseAction.Invoke(Define.MouseEvent.PointerDown);
                     // 누른시간이 들어옴
                     _pressedTime = Time.time;
                 }
                 // 지정해서 실행을하는건가  
                 // 눌렀을때 press 여기서 뭔가 보냄
                 // 인보크가 함수라는걸 인지해야됨 매개변수넘긴거임  
-                MouseEvent.Invoke(Define.MouseEvent.Press);
+                MouseAction.Invoke(Define.MouseEvent.Press);
                 _pressed = true;
             }
             // 누른상황빼고 모두
@@ -56,8 +56,8 @@ public class InputManager
                 {
                     // 0.2는 지난시간
                     if (Time.time < _pressedTime + 0.2f)
-                        MouseEvent.Invoke(Define.MouseEvent.Click);
-                    MouseEvent.Invoke(Define.MouseEvent.PointerUp);
+                        MouseAction.Invoke(Define.MouseEvent.Click);
+                    MouseAction.Invoke(Define.MouseEvent.PointerUp);
                 }
 
                 _pressed = false;
@@ -69,6 +69,6 @@ public class InputManager
     public void Clear()
     {
         KeyAction = null;
-        MouseEvent = null;
+        MouseAction = null;
     }
 } 

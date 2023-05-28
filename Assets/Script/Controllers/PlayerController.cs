@@ -37,10 +37,7 @@ public class PlayerController : MonoBehaviour
 
     public PlayerState State
     {
-        get
-        {
-            return _state;
-        }
+        get { return _state; }
         set
         {
             _state = value;
@@ -77,8 +74,8 @@ public class PlayerController : MonoBehaviour
     {
         _stat = gameObject.GetComponent<PlayerStat>();
         // 저번엔 리스너패턴 이번엔 옵저버패턴
-        Managers.Input.MouseEvent -= OnMouseEvent;
-        Managers.Input.MouseEvent += OnMouseEvent;
+        Managers.Input.MouseAction -= OnMouseEvent;
+        Managers.Input.MouseAction += OnMouseEvent;
 
         // 그냥 스타트에서 UI소환하면되는거였네 프리팹으로 만들들고나서 소환코드
         //Managers.Resource.Instantiate("UI/UI_Button");
@@ -102,6 +99,7 @@ public class PlayerController : MonoBehaviour
         // 몬스터가 내 사정거리보다 가까우면 공격
         if (_lockTarget != null)
         {
+            _destPos = _lockTarget.transform.position;
             // 몬스터와 나 사이의 거리
             float distance = (_destPos - transform.position).magnitude;
             // 1 = 사정거리
@@ -135,7 +133,7 @@ public class PlayerController : MonoBehaviour
             }
 
             //  이동뿐만아니라 바라보는 방향도 설정해줘야됨  
-            transform.rotation = Quaternion.Slerp(transform.rotation, Quaternion.LookRotation(dir), 10 * Time.deltaTime);
+            transform.rotation = Quaternion.Slerp(transform.rotation, Quaternion.LookRotation(dir), 20 * Time.deltaTime);
             //transform.position += dir.normalized * moveDist;
 
         }
@@ -150,7 +148,7 @@ public class PlayerController : MonoBehaviour
         // 방향지정을 안해줬었네 그래서 바라보고 떄리지않았던건가
         if (_lockTarget != null)
         {
-            Vector3 dir = (_lockTarget.transform.position - transform.position).normalized;
+            Vector3 dir = _lockTarget.transform.position - transform.position;
             Quaternion quat = Quaternion.LookRotation(dir);
 
             transform.rotation = Quaternion.Lerp(transform.rotation, quat, 20 * Time.deltaTime);
@@ -158,6 +156,7 @@ public class PlayerController : MonoBehaviour
     }
 
     // 유니티 애니메이션 이벤트에 function으로 바로 집어넣어서 사용
+    // 원복하기 위한 함수 계속 false가 되기때문에? 끝나면 skill을 쓰는것이다
     void OnHitEvent()
     {
         Debug.Log("OnHitEvent");
@@ -168,11 +167,11 @@ public class PlayerController : MonoBehaviour
         }
         else
         {
+            // 포인터를 뗴야만 true가 되기때문에 누르고있으면 스킬이 무한반복이다
             State = PlayerState.Skill;
         }
 
         // 상태에 따라서 모션을 할수가있음
-        State = PlayerState.Moving;
         //_state = PlayerState.Idle;
 
     }
@@ -233,6 +232,7 @@ public class PlayerController : MonoBehaviour
             case PlayerState.Skill:
                 {
                     // 스킬을 멈추게함 근데 눌렀을 때 스킬이 나가긴하는지가 의문
+                    // 포인터업했을때 스킬을 멈춰주는것
                     if (evt == Define.MouseEvent.PointerUp)
                         _stopSkill = true;
                 }
