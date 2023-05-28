@@ -43,6 +43,7 @@ public class GameScene : BaseScene
         //}
         //co = StartCoroutine("ExplodeAfterSeconds", 4.0f);
         //StartCoroutine("CoStopExplode", 2.0f);
+        gameObject.GetOrAddComponent<CursorController>();
     }
     //IEnumerator CoStopExplode(float seconds)
     //{
@@ -63,6 +64,7 @@ public class GameScene : BaseScene
     //    Debug.Log("Explode Excute!!!");
     //    co = null;
     //}
+
     public override void Clear()
     {
     }
