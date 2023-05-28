@@ -85,7 +85,7 @@ public class PlayerController : MonoBehaviour
         //Managers.UI.ClosePopupUI(ui);
 
         //Managers.UI.ShowSceneUI<UI_Inven>();
-
+        Managers.UI.MakeWorldSpaceUI<UI_HPBar>(transform);
     }
 
     
