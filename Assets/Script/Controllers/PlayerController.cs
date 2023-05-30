@@ -19,7 +19,7 @@ public class PlayerController : BaseController
     bool _stopSkill = false;
 
 
-    protected override void Init()
+    public override void Init()
     {
         _stat = gameObject.GetComponent<PlayerStat>();
         // 저번엔 리스너패턴 이번엔 옵저버패턴
@@ -34,7 +34,8 @@ public class PlayerController : BaseController
         //Managers.UI.ClosePopupUI(ui);
 
         //Managers.UI.ShowSceneUI<UI_Inven>();
-        Managers.UI.MakeWorldSpaceUI<UI_HPBar>(transform);
+        if (gameObject.GetComponentInChildren<UI_HPBar>() == null)
+            Managers.UI.MakeWorldSpaceUI<UI_HPBar>(transform);
     }
 
     

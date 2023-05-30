@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class BaseController : MonoBehaviour
+public abstract class BaseController : MonoBehaviour
 {
     [SerializeField]
     protected Vector3 _destPos;
@@ -55,10 +55,7 @@ public class BaseController : MonoBehaviour
         Init();
     }
 
-    protected virtual void Init()
-    {
-
-    }
+    
     void Update()
     {
         //UpdateMouseCursor();
@@ -80,7 +77,7 @@ public class BaseController : MonoBehaviour
         }
         // 조건 만족하면 여기서 실행하는느낌인가 
     }
-
+    public abstract void Init();
     protected virtual void UpdateDie()
     {
 
