@@ -37,10 +37,10 @@ public class UI_Button : UI_Popup
     {
         ItemIcon,
     }
-    private void Start()
-    {
-        Init();
-    }
+    //private void Start()
+    //{
+    //    Init();
+    //}
 
    
     int _score = 0;

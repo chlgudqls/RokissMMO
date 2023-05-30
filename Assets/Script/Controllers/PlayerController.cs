@@ -11,66 +11,15 @@ using UnityEngine.AI;
 
 
 
-public class PlayerController : MonoBehaviour
+public class PlayerController : BaseController
 {
-    public enum PlayerState
-    {
-        Die,
-        Moving,
-        Idle,
-        Skill,
-    }
-
     int _mask = (1 << (int)Define.Layer.Ground | 1 << (int)Define.Layer.Monster);
 
     PlayerStat _stat;
-
-    Vector3 _destPos;
- 
-    // 에니메이션과 상태 둘중하나를 뺴먹는 참사가 발생할수있다고함
-    // 그래서 프로퍼티를 통해서 일대일 매칭을 시킴
-
-    [SerializeField]
-    PlayerState _state = PlayerState.Idle;
-
-    GameObject _lockTarget;
-
-    public PlayerState State
-    {
-        get { return _state; }
-        set
-        {
-            _state = value;
-
-            Animator anim = GetComponent<Animator>();
-            switch (_state)
-            {
-                case PlayerState.Die:
-                    //anim.SetBool("attack", false);
-                    break;
-                case PlayerState.Idle:
-                    anim.CrossFade("WAIT", 0.1f);
-                    //anim.Play("WAIT");
-                    //anim.SetFloat("speed", 0);
-                    //anim.SetBool("attack", false);
-                    break;
-                case PlayerState.Moving:
-                    anim.CrossFade("RUN", 0.1f);
-                    //anim.Play("RUN");
-                    //anim.SetFloat("speed", _stat.MoveSpeed);
-                    //anim.SetBool("attack", false);
-                    break;
-                case PlayerState.Skill:
-                    anim.CrossFade("Attack", 0.1f, -1, 0);
-                    //anim.Play("Attack");
-                    //anim.SetBool("attack", true);
-                    break;
-            }
-        }
-    }
+    bool _stopSkill = false;
 
 
-    void Start()
+    protected override void Init()
     {
         _stat = gameObject.GetComponent<PlayerStat>();
         // 저번엔 리스너패턴 이번엔 옵저버패턴
@@ -89,11 +38,11 @@ public class PlayerController : MonoBehaviour
     }
 
     
-    void UpdateDie()
-    {
+    //void UpdateDie()
+    //{
 
-    }
-    void UpdateMoving()
+    //}
+    protected override void UpdateMoving()
     {
         // 이동중에
         // 몬스터가 내 사정거리보다 가까우면 공격
@@ -105,7 +54,7 @@ public class PlayerController : MonoBehaviour
             // 1 = 사정거리
             if (distance <= 1.5f)
             {
-                State = PlayerState.Skill;
+                State = Define.State.Skill;
                 // 더 이상 이동할 필요가 없으니 리턴
                 return;
             }
@@ -113,7 +62,7 @@ public class PlayerController : MonoBehaviour
         Vector3 dir = _destPos - transform.position;
         if (dir.magnitude < 0.1f)
         {
-            State = PlayerState.Idle;
+            State = Define.State.Idle;
         }
         else
         {
@@ -128,7 +77,7 @@ public class PlayerController : MonoBehaviour
             if (Physics.Raycast(transform.position + Vector3.up * 0.5f, dir, 1.0f, LayerMask.GetMask("Block")))
             {
                 if(!Input.GetMouseButton(0))
-                    State = PlayerState.Idle;
+                    State = Define.State.Idle;
                 return;
             }
 
@@ -139,11 +88,11 @@ public class PlayerController : MonoBehaviour
         }
 
     }
-    void UpdateIdle()
-    {
-    }
+    //void UpdateIdle()
+    //{
+    //}
 
-    void UpdateSkill()
+    protected override void UpdateSkill()
     {
         // 방향지정을 안해줬었네 그래서 바라보고 떄리지않았던건가
         if (_lockTarget != null)
@@ -159,44 +108,34 @@ public class PlayerController : MonoBehaviour
     // 원복하기 위한 함수 계속 false가 되기때문에? 끝나면 skill을 쓰는것이다
     void OnHitEvent()
     {
-        Debug.Log("OnHitEvent");
+        if (_lockTarget != null)
+        {
+            Stat targetStat = _lockTarget.GetComponent<Stat>();
+
+            int damage = Mathf.Max(0, _stat.Attack - targetStat.Defence);
+
+            Debug.Log(damage);
+
+            targetStat.Hp -= damage;
+         }
+        //Debug.Log("OnHitEvent");
 
         if (_stopSkill)
         {
-            State = PlayerState.Idle;
+            State = Define.State.Idle;
         }
         else
         {
             // 포인터를 뗴야만 true가 되기때문에 누르고있으면 스킬이 무한반복이다
-            State = PlayerState.Skill;
+            State = Define.State.Skill;
         }
 
         // 상태에 따라서 모션을 할수가있음
-        //_state = PlayerState.Idle;
+        //_state = Define.State.Idle;
 
     }
     // 근데 이걸 update에서 하네
-    void Update()
-    {
-        //UpdateMouseCursor();
-
-        switch (State)
-        {
-            case PlayerState.Die:
-                UpdateDie();
-                break;
-            case PlayerState.Moving:
-                UpdateMoving();
-                break;
-            case PlayerState.Idle:
-                UpdateIdle();
-                break;
-            case PlayerState.Skill:
-                UpdateSkill();
-                break;
-        }
-        // 조건 만족하면 여기서 실행하는느낌인가 
-    }
+    
 
     // 이동부분과 커서의 표현부분을 따로 둠
     //void UpdateMouseCursor()
@@ -208,11 +147,10 @@ public class PlayerController : MonoBehaviour
     // 어쨋거나 비트상으로 봤을때 01로구분하고 8번째9번째 비트가 0,1인지를 확인하는 듯
 
     // 아.. 대리자에서 <>안에 들어가는게 인자의 숫자였음 매개변수갯수
-    bool _stopSkill = false;
 
     void OnMouseEvent(Define.MouseEvent evt)
     {
-        //if (State == PlayerState.Die)
+        //if (State == Define.State.Die)
         //    return;
         // 매개변수로 이제 조리하는거임
         // 근데 클릭이 아니면 리턴
@@ -223,13 +161,13 @@ public class PlayerController : MonoBehaviour
         switch (State)
         {
             // 이런식으로 나눠주면 스킬상태일땐 괜한 로직이 들어가지않는다
-            case PlayerState.Idle:
+            case Define.State.Idle:
                 OnMouseEvent_IdleRun(evt);
                 break;
-            case PlayerState.Moving:
+            case Define.State.Moving:
                 OnMouseEvent_IdleRun(evt);
                 break;
-            case PlayerState.Skill:
+            case Define.State.Skill:
                 {
                     // 스킬을 멈추게함 근데 눌렀을 때 스킬이 나가긴하는지가 의문
                     // 포인터업했을때 스킬을 멈춰주는것
@@ -258,7 +196,7 @@ public class PlayerController : MonoBehaviour
                     {
                         _destPos = hit.point;
                         // 현재 무빙 상태가 거쳐야만 스킬상태로 넘어갈 수있음 down이후엔 press만 호출되니까 무빙으로 가지않음
-                        State = PlayerState.Moving;
+                        State = Define.State.Moving;
                         _stopSkill = false;
 
                         //Debug.Log($"hit {hit.transform.gameObject.name}");

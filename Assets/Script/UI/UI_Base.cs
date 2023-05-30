@@ -11,6 +11,11 @@ public abstract class UI_Base : MonoBehaviour
 
     public abstract void Init();
 
+    private void Start()
+    {
+        Init();
+    }
+
     // 바인드를 몇개를 
     protected void Bind<T>(Type type) where T : UnityEngine.Object
     {
