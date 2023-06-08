@@ -67,12 +67,9 @@ public class PlayerController : BaseController
         }
         else
         {
-            NavMeshAgent nma = gameObject.GetOrAddComponent<NavMeshAgent>();
+            //NavMeshAgent nma = gameObject.GetOrAddComponent<NavMeshAgent>();
 
-            // 이동값이 저거임 _speed * Time.deltaTime 그대로가 아니라 프레임단위로 쪼개지는값이라서 이게 계속좁혀지다가 magnitude보다 작아져야됨
-            float moveDist = Mathf.Clamp(_stat.MoveSpeed * Time.deltaTime, 0, dir.magnitude);
-
-            nma.Move(dir.normalized * moveDist);
+            //nma.Move(dir.normalized * moveDist);
 
             Debug.DrawRay(transform.position, dir.normalized, Color.green);
             if (Physics.Raycast(transform.position + Vector3.up * 0.5f, dir, 1.0f, LayerMask.GetMask("Block")))
@@ -81,6 +78,10 @@ public class PlayerController : BaseController
                     State = Define.State.Idle;
                 return;
             }
+
+            // 이동값이 저거임 _speed * Time.deltaTime 그대로가 아니라 프레임단위로 쪼개지는값이라서 이게 계속좁혀지다가 magnitude보다 작아져야됨
+            float moveDist = Mathf.Clamp(_stat.MoveSpeed * Time.deltaTime, 0, dir.magnitude);
+            transform.position += dir.normalized * moveDist;
 
             //  이동뿐만아니라 바라보는 방향도 설정해줘야됨  
             transform.rotation = Quaternion.Slerp(transform.rotation, Quaternion.LookRotation(dir), 20 * Time.deltaTime);
@@ -115,9 +116,14 @@ public class PlayerController : BaseController
 
             int damage = Mathf.Max(0, _stat.Attack - targetStat.Defence);
 
-            Debug.Log(damage);
+            //Debug.Log(damage);
 
             targetStat.Hp -= damage;
+            if (targetStat.Hp <= 0)
+            {
+                GameObject.Destroy(targetStat.gameObject);
+            }
+
          }
         //Debug.Log("OnHitEvent");
 

@@ -7,7 +7,12 @@ public class Managers : MonoBehaviour
     static Managers s_instance;
 
     static Managers Instance { get { Init(); return s_instance; } }
+    #region Contents
+    GameManagerEx _game = new GameManagerEx();
 
+    public static GameManagerEx Game { get { return Instance._game; } }
+    #endregion
+    #region Core
     DataManager _data = new DataManager();
     InputManager _input = new InputManager();
     PoolManager _pool = new PoolManager();
@@ -22,7 +27,7 @@ public class Managers : MonoBehaviour
     public static SceneManagerEx Scene { get { return Instance._scene; } }
     public static SoundManager Sound { get { return Instance._sound; } }
     public static UIManager UI { get { return Instance._ui; } }
-   
+    #endregion
     void Start()
     {
         // 이거 떄문인가 init 호출하는곳이 없었음 이게 호출되야 아닌가
