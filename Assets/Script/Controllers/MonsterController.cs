@@ -14,6 +14,8 @@ public class MonsterController : BaseController
     float _attackRange = 2;
     public override void Init()
     {
+        WorldObjectType = Define.WorldObject.Monster;
+
         _stat = gameObject.GetComponent<Stat>();
 
         if(gameObject.GetComponentInChildren<UI_HPBar>() == null)

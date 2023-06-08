@@ -21,6 +21,8 @@ public class PlayerController : BaseController
 
     public override void Init()
     {
+        WorldObjectType = Define.WorldObject.Player;
+
         _stat = gameObject.GetComponent<PlayerStat>();
         // 저번엔 리스너패턴 이번엔 옵저버패턴
         Managers.Input.MouseAction -= OnMouseEvent;
