@@ -22,7 +22,6 @@ public class GameManagerEx
                 _player = go;
                 break;
         }
-
         return go;
     }
     public Define.WorldObject GetWorldObjectType(GameObject go)

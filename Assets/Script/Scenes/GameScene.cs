@@ -44,6 +44,12 @@ public class GameScene : BaseScene
         //co = StartCoroutine("ExplodeAfterSeconds", 4.0f);
         //StartCoroutine("CoStopExplode", 2.0f);
         gameObject.GetOrAddComponent<CursorController>();
+
+        GameObject player = Managers.Game.Spawn(Define.WorldObject.Player, "unitychan");
+
+        Camera.main.gameObject.GetOrAddComponent<CameraController>().SetPlayer(player);
+
+        Managers.Game.Spawn(Define.WorldObject.Monster, "Knight");
     }
     //IEnumerator CoStopExplode(float seconds)
     //{

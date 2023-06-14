@@ -15,16 +15,14 @@ public class CameraController : MonoBehaviour
          
     }
 
+    public  void SetPlayer(GameObject player) { _player = player; }
     void LateUpdate()
     {
         // 이번엔 카메라가 레이케스팅을 해서 어떤걸 인식해서 상황에따라 반응
         if(_mode == Define.CameraMode.QuaterView)
         {
-            if (_player == null)
-            {
-
+            if (!_player.IsValid())
                 return;
-            }
             //Debug.DrawRay(_player.transform.position, _delta, Color.green, 2);
 
             // 광선을 캐릭으로 쏘는거임 

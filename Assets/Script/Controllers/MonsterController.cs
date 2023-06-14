@@ -111,7 +111,7 @@ public class MonsterController : BaseController
 
             if (playerStat.Hp <= 0)
             {
-                GameObject.Destroy(playerStat.gameObject);
+                Managers.Game.Despawn(playerStat.gameObject);
             }
              
             if (playerStat.Hp > 0)
