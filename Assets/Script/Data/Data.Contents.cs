@@ -15,8 +15,9 @@ namespace Data
         // 변수명이 완벽히 일치해야하는 점이있음 제이슨파일 변수명과 함께
         // 자료형도 조심
         public int level;
-        public int hp;
+        public int maxHp;
         public int attack;
+        public int totalExp;
     }
 
     [Serializable]

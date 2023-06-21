@@ -13,7 +13,7 @@ public class CameraController : MonoBehaviour
     void Start()
     {
          
-    }
+    } 
 
     public  void SetPlayer(GameObject player) { _player = player; }
     void LateUpdate()
@@ -29,7 +29,7 @@ public class CameraController : MonoBehaviour
             // 캐릭에서 쏘는건가  
             // 플레이어가 레이케스팅하면 카메라가 반응하는거였네
             RaycastHit hit;
-            if (Physics.Raycast(_player.transform.position, _delta, out hit, _delta.magnitude, LayerMask.GetMask("Wall")))
+            if (Physics.Raycast(_player.transform.position, _delta, out hit, _delta.magnitude, 1 << (int)Define.Layer.Block))
             {
                 // 이거 반대로 하면 안되네 그건아니네
                 float dist = (hit.point - _player.transform.position).magnitude * 0.8f;

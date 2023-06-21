@@ -116,17 +116,19 @@ public class PlayerController : BaseController
         {
             Stat targetStat = _lockTarget.GetComponent<Stat>();
 
-            int damage = Mathf.Max(0, _stat.Attack - targetStat.Defence);
+            //int damage = Mathf.Max(0, _stat.Attack - targetStat.Defence);
 
-            //Debug.Log(damage);
+            ////Debug.Log(damage);
 
-            targetStat.Hp -= damage;
-            if (targetStat.Hp <= 0)
-            {
-                GameObject.Destroy(targetStat.gameObject);
-            }
+            //targetStat.Hp -= damage;
+            //if (targetStat.Hp <= 0)
+            //{
+            //    GameObject.Destroy(targetStat.gameObject);
+            //}
 
-         }
+            targetStat.OnAttacked(_stat);
+
+        }
         //Debug.Log("OnHitEvent");
 
         if (_stopSkill)
