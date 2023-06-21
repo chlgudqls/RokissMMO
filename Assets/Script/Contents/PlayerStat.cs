@@ -15,7 +15,26 @@ public class PlayerStat : Stat
         get { return _exp; } 
         set 
         { 
-            _exp = value; 
+            _exp = value;
+
+            int level = Level;
+            while (true)
+            {
+                Data.Stat stat;
+                if (!Managers.Data.StatDict.TryGetValue(level + 1, out stat))
+                    break;
+                if (_exp < stat.totalExp)
+                    break;
+                level++;
+            }
+
+            if (level != Level)
+            {
+                Debug.Log("Level Up!");
+
+                Level = level;
+                SetStat(_level);
+            }
         } 
     }
 
