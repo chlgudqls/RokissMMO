@@ -40,7 +40,7 @@ public class Stat : MonoBehaviour
         int damage = Mathf.Max(0, attacker.Attack - Defence);
         Hp -= damage;
 
-        if (Hp == 0)
+        if (Hp <= 0)
         {
             Hp = 0;
             OnDead(attacker);
@@ -52,6 +52,7 @@ public class Stat : MonoBehaviour
         PlayerStat playerStat = attacker as PlayerStat;
         if (playerStat != null)
         {
+            // 이게 대입될때마다 그 로직이 호출됨 
             playerStat.Exp += 15;
         }
 

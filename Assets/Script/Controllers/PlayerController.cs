@@ -62,7 +62,11 @@ public class PlayerController : BaseController
                 return;
             }
         }
+        // 이동
         Vector3 dir = _destPos - transform.position;
+
+        // 무슨 말인지 모르겠으나 y를 0으로 설정해야 올라가지않음
+        dir.y = 0;
         if (dir.magnitude < 0.1f)
         {
             State = Define.State.Idle;
